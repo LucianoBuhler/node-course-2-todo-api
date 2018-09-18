@@ -27,7 +27,7 @@ app.get('/todos', (req, res) => {
     res.send({todos});
   }, (e) => {
     res.status(400).send(e);
-  })
+  });
 });
 
 // inserted to solve problems with the automatized test
