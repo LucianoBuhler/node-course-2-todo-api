@@ -6,7 +6,6 @@ var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
-
 var app = express();
 
 // use is a method to configure the middleware used by the routes of the Express HTTP server object
@@ -32,7 +31,6 @@ app.get('/todos', (req, res) => {
   });
 });
 
-// GET /todos/123123
 app.get('/todos/:id', (req, res) => {
   var id = req.params.id;
 
