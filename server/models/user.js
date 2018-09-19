@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 // Users section
-var Users = mongoose.model('Users', {
+var User = mongoose.model('User', {
   name: {
     type: String,
     required: true,
@@ -20,4 +20,4 @@ var Users = mongoose.model('Users', {
   }
 });
 
-module.exports = {Users};
+module.exports = {User};
