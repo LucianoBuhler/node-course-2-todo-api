@@ -7,6 +7,7 @@ var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
 var app = express();
+const port = process.env.PORT || 3000;
 
 // use is a method to configure the middleware used by the routes of the Express HTTP server object
 app.use(bodyParser.json());
@@ -51,8 +52,8 @@ app.get('/todos/:id', (req, res) => {
 
 // inserted to solve problems with the automatized test
 if(!module.parent) {
-  app.listen(3000, () => {
-    console.log('Started on port 3000');
+  app.listen(port, () => {
+    console.log(`Started up at port ${port}`);
   });
 };
 
