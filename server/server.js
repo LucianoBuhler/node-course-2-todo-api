@@ -118,6 +118,19 @@ app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
 
+app.post('/users/login', (req, res) => {
+  // get user data from body
+  var body = _.pick(req.body, ['email', 'password']);
+
+  User.findByCredentials(body.email, body.password).then((user) => {
+    return user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user);
+    })
+  }).catch((e) => {
+    res.status(400).send();
+  });
+});
+
 // inserted to solve problems with the automatized test
 if(!module.parent) {
   app.listen(port, () => {
