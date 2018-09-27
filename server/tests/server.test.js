@@ -299,3 +299,23 @@ describe ('POST /users/login', () => {
       });
   });
 });
+
+describe('DELETE /users/me/token', () => {
+  it('', (done) => {
+    request(app)
+    .delete('/users/me/token')
+    .set('x-auth', users[0].tokens[0].token)
+    .expect(200)
+    .end((err, res) => {
+      if (err) { // if some error to happen
+        return done(err);
+      }
+
+      User.findById(users[0]._id).then((user) => { // search user in database
+        expect(user.tokens.length).toBe(0); // confirm if token array is empty
+        done();
+      }).catch((e) => done(e)); // if some error to happen
+    });
+
+  });
+});
