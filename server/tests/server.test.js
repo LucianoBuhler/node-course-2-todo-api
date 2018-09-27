@@ -22,7 +22,7 @@ describe('POST /todos', () => {
         expect(res.body.text).toBe(text);
       })
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return done(err);
         }
 
@@ -218,11 +218,11 @@ describe('POST /users', () => {
         }
 
         User.findOne({email}).then((user) => {
-          // expect(user).toExists(); // deprecated
+          // expect(user).toExist(); // deprecated
           expect(user).toBeTruthy();
           expect(user.password).not.toBe(password);
           done();
-        });
+        }).catch((e) => done(e));
       });
   });
 
@@ -248,3 +248,54 @@ describe('POST /users', () => {
       .end(done);
   });
 })
+
+describe ('POST /users/login', () => {
+  it ('should login user and return auth token', (done) => {
+    request(app)
+      .post('/users/login') //defined route
+      .send({ // send data
+        email: users[1].email,
+        password: users[1].password
+      })
+      .expect(200) // status expected
+      .expect((res) => { // custom function
+        expect(res.headers['x-auth']).toBeTruthy(); // test if header exists
+      })
+      .end((err, res) => {
+        if (err) { // if some error to happen
+          return done(err);
+        }
+
+        User.findById(users[1]._id).then((user) => { // search user in database
+          expect(user.tokens[0]).toMatchObject({ // DEPRECATED: toInclude
+            access: 'auth',
+            token: res.headers['x-auth']
+          });
+          done();
+        }).catch((e) => done(e)); // if some error to happen
+      });
+  });
+
+  it ('should reject invalid login', (done) => {
+    request(app)
+      .post('/users/login') //defined route
+      .send({ // send data
+        email: users[1].email,
+        password: users[1].password + '1'
+      })
+      .expect(400) // status expected
+      .expect((res) => { // custom function
+        expect(res.headers['x-auth']).toBeFalsy(); // test if header exists
+      })
+      .end((err, res) => {
+        if (err) { // if some error to happen
+          return done(err);
+        }
+
+        User.findById(users[1]._id).then((user) => { // search user in database
+          expect(user.tokens.length).toBe(0);
+          done();
+        }).catch((e) => done(e)); // if some error to happen
+      });
+  });
+});

@@ -19,10 +19,6 @@ const users = [{
   _id: userTwoId,
   email: 'test2@node.com',
   password: 'password2',
-  tokens: [{
-    access: 'auth',
-    token: jwt.sign({_id: userTwoId, access: 'auth'}, '123123').toString()
-  }]
 }];
 
 const todos = [{
@@ -31,6 +27,7 @@ const todos = [{
 }, {
   _id: new ObjectID(),
   text: 'Second test todo',
+  completed: true,
   completedAt: 333
 }];
 
